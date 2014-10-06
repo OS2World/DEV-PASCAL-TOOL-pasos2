@@ -1,0 +1,367 @@
+
+    PASCAL compiler, ALPHA 0.1c release for OS/2
+
+                                                    Eindhoven, 16 december 1993
+      
+    COMMAND
+            pc  [options] <filename>.<ext>
+            pas [options] <filename>.<ext>
+
+    DESCRIPTION
+
+        This is the temporary manual page for 
+    
+             the pascal compiler frontend,
+             the pascal compiler.
+
+        In general it should be sufficient to use the compiler in the following 
+        way:
+            'pc file.pas'
+            'pc otherfile.s'
+            'pc stillotherfile.o'
+            
+        This creates a file 'file.exe' which can be executed.
+    
+        The PASCAL 'version' implemented is as close to the standard level(0)
+        as possible. There are a few extentions, a few ommisions, plenty of 
+        bugs, and some not yet implemented areas.
+
+        Currently is it not possible to create seperate modules without 
+        changing the intermediate assembler file. If object-modules need to be 
+        made, then make a program of every module, with an empty main program 
+        body. Create the assembly files, from which the '$Pmain'-routine should
+        be deleted. This file can then be assembled.
+        There is currently no supported way to use variables which are declared 
+        in other modules. For procedures and routines is the attribute 
+        'EXTERNAL' available. 
+            Eg.: 'Procedure SomeWhereElse(i;integer); EXTERNAL'
+
+        The actual code is transformed in several steps:
+                1)    The user code is passed through the preprocessor.
+                      Currently is this the C-preprocessor, which complains
+                      about unterminated strings ' in PASCAL comments.
+                      You'll have to change your comments.
+                2)    Then 'pas' is used to transform the resulting PASCAL into 
+                      assembly. Currently Microsoft MASM/ML is the only 
+                      assembly language supported.
+                3)    The assembly code is used to create the objectcode for 
+                      the module.
+                4)    Which is linked together with the PASCAL library, p.lib,
+                      and creates a the resulting executable.
+                      
+        To watch these steps, just add the -v switch to the pc command.              
+    
+    OPTIONS for pc
+            -v*     Show command the frontend executes.
+            -Dname 
+            -Dname=def Set definitions for the preprocessor.
+            -Uname  Instruct the preprocessor to undefine 'name'.
+            -S      Generate an assembly file and terminate
+            -c      Generate an object file, but do not link.
+            -E      Only run the preprocessor on the file, and write results to
+                    standard ouput.
+            -o <file>        Specify the file in which the result should be 
+                    written.
+            -h      Runtime help information.
+            -Q      Suppress the copyright info when pc starts
+            -x      Generate a crossreference in <filename>.xrf
+            -m      Generate MASM typical code and possibly use MASM.
+            -t      Generate TASM typical code and possibly use TASM.
+            -G      Generate GAS typical code and use GAS to assemble.                    
+    
+    OPTIONS for pas
+            -v*     Switch verbosity one level higher.
+            -h      Runtime help information.
+            -x      Generate a crossreference in <filename>.xrf
+            -m      Generate MASM typical code and possibly use MASM.
+            -t      Generate TASM typical code and possibly use TASM.
+            -G      Generate GAS typical code and use GAS to assemble.                    
+    
+            -d      Debugging options.
+                        bEePprsTt
+                r     List the tokens found by the scanner 
+                p     Show which rules are matched in the parser
+                i     dump the identifier table to <filename>.ids
+                t/T*  dump the AST/defs tree (or more Tree) 
+                            to <filename>.tre for AST trees
+                            to <filename>.syt for defs-trees
+                s     write a trace of the semantic evaluation to <filename>.sem
+                P     Dump the environment as it is Predefined
+                e/E*  List the environments on numerous ocassions
+    
+             * indicates that a switch know levels, multiple time specification
+               of the switch indicates "more" of that switch
+               Capitalisations of those switches increments the debuggin level 
+               with five lowercase's.
+
+    ASSEMBLERS
+    
+    NOTE: IMPORTANT.
+        This compiler does not include an assembler, but it does require one.
+        This third release can either use:
+            Microsoft MASM or 
+            Borland TASM for OS/2
+            
+         OR GNU/GAS which can run on the EMX environment for DOS and OS2.
+         (Note that for execution undr DOS a CO-processor is required.
+          The Pascal compiler uses floating point at some places.
+          This will be changed in the near future.)
+
+        And currently the MASM part is very picky. 
+        It only generates code for MASM 6.0A (note the A !!)
+        I had severe problems when using the regular MASM 6.0, The major
+        reason was wrong address/offset calculations.
+        I haven't tried it with MASM 5.x, since I don't have it.
+      
+        If you can't get it to run with MASM 6.0, go and yell at MS to make
+        MASM 6.0A more freely available. So people can buy it.
+        
+        Or buy Borlands TASM, which unfortunately is included in a rather large
+        package, and ain't cheap either.
+        
+        If you have installed the EMX gnu compiler tools, you can use GNU/GAS
+        which is the default. If you have installed only the emx-runtime 
+        environment installed you'll need to add some extra tools.
+
+               Install emxrt
+		       emxdev
+		       gnudev. (See the install.emx file)
+
+        These files are part of the EMX distribution which include GNU/GCC.
+	
+    DEBUGGING
+
+        Not much attention has (yet) been given to debugging and creating 
+        debugging information. I debug the programs on assembly language level 
+        using IBM's IPMD. 
+        You don't want to do this, unless you're familiar with the 386-code, 
+        since no PASCAL code is included. And it can be mind boggling to find 
+        out what is going on.
+    
+    EXTENTIONS
+        Several extenstions have been implemented to make life a little easier.
+    
+        Comments:       A comment started by one version of the comments 
+                        starter, has to be terminated by the matching comment 
+                        close combination. They cannot be nested.
+                        Thus the following are complete comments:
+                        {(**)}, (*{}*). (*}*) {*)}
+                        Not correct are:
+                        {*), (*}, (*{*), {(*} or {(*{}*)}
+        
+        Identifiers:    Identifiers can contain '_' and '$' as valid characters.
+                        if '_' of '$' is used a starting character then the 
+                        second character has to be one from the 
+                        set ['a'..'z','A'..'Z'].
+                        Identifiers are case insensitive.
+    
+        Declaration order    The declaration order of constants, types, 
+                        variables and routines is not required. These 
+                        declaration blocks can be repeated multiple times in 
+                        any order. The only restriction is that only 
+                        pointer-type definitions can refer to types yet to be 
+                        declared.
+        
+        EXTERNAL        Net to the 'FORWARD' directive for routines, is the 
+                        'EXTERNAL' directive available as an indication to the 
+                        compiler/assembler that code for this routine is to be 
+                        found elsewhere.
+                    
+        CASE-statement  The CASE-statement has been expanded with a default 
+                        clause. Both OTHERWISE and ELSE are recognised as 
+                        default selectors. This is the grammar for the 
+                        extention:
+                    
+      statement9a    =  'CASE' expression 'OF' case_list case_default case_end.
+        
+      case_default     =  <  
+        /* And these 2 are definitly not in the ISO standard.
+         */
+        
+        /* A Microsoft extention */
+        case_default1  =  'OTHERWISE' statement  .
+        case_default1a =  ';' 'OTHERWISE' statement  .
+        
+        /* A Turbo Pascal extention 
+        /* Hopefully it does not conflict with the regular treatment of an
+        /* If-Then-Else statement.
+         */
+        case_default2  =  'ELSE' statement .
+      >.
+      
+        MinInt          Next to the constant MaxInt (2147483647) is also the 
+                        constant MinInt (-2147483648) available.
+    
+        Assign          To be able to interact with the filesystem, it is 
+                        possible to use the procedure 
+                            ASSIGN(Var f: anyfile, s :string),
+                        an associate an external filename with an internal file.
+
+    OMMISIONS
+        
+        PACKED          The keyword 'PACKED' is allowed in declaration but is 
+                        ignored. Using it does not give any allocation 
+                        advantages. The accompanying routines 'PACK' and 
+                        'UNPACK' are not implemented. They are recognised by 
+                        the scanner/parser.
+                    
+        CONFORMANT ARRAY    Conformant array are not include with a PASCAL 
+                        level(0) implementation.
+                    
+    FEATURES
+
+        SET             A set can be as big as 64K elements, and the 
+                        limits are -32768..32767.
+
+    NOT YET IMPLEMENTED
+    
+        REAL           The major ommision to this release is the lack of 
+                       floating point. The compiler recognises floating point 
+                       PASCAL, but is not able to generate any floating point 
+                       code. This will be one of the first next items to be 
+                       fixed.
+    
+        ROUTINES as parameters.
+                       The standard allows routines to passed a parameters to 
+                       other routines. Again the parser recognises it, but 
+                       during semantic analysis, strange things could happen.
+                   
+    BUGS
+
+        To many to report here. That is why this version is an ALPHA release.
+        There are several flaws in the code generation. And although many case 
+        have been tested in isolation, complex situations can cause wrong code 
+        to be generated.
+        Please report these to the author, so that they can be fixed. 
+        (Or at least mentioned in the buglist)
+    
+        The compiler is sometimes able to recognise the fact that it is in an
+        inconsistent state. Or worse, it could even dump core :-(
+        Then usually strange looking text is written to the screen.
+        This output, your input, and possibly the core dump, can be of help to 
+        me. Prefably stripped to the smallest code-chunk which still exhibits 
+        the behaviour.
+    
+        
+        These messages can look like:
+                 "Houston, Code generation problem.
+                  Program aborted."
+            Or:
+                 "Houston, we've got a serious problem with the register 
+                      allocation.
+                  Program aborted."
+
+        Which means that yor programmed a program sequence which confuses the
+        codegenerator part of the compiler. This should not happen, so it is
+        a compiler bug. Please report this bug.
+        Sometimes it is possible to rewrite the expression or statement 
+        causing the trouble. But you'll have to locate the cullpit.
+        
+        On several places in the runtime library are tests on the outcome of
+        systemcalls. If they fail, a message with that regard is printed on 
+        'stderr'.
+  
+        During execution, traps can occur. Usually this means that either 
+        pointers or array accesses have been outside the current allowed space.
+        Eg:
+            core dumped
+            SYS1808:
+            The process has stopped.  The software diagnostic
+            code (exception code) is  0005.
+        
+        These could be compiler errors, but lately I haven't found many of 
+        those that showed in this blunt way. Usually/un fortunately compiler 
+        errors show more 'secretly'.
+    
+    DEFAULTS    
+        
+        Default stack size is set to 128 Kb, which can be modified in 
+        passtart.asm.
+        Default heap size is set to 1 Mb, but can be changed by recompiling 
+        the 'heaplib.pas' code which is part of the runtime environment.
+    
+    ENVIRONMENT
+
+        PASCAL for OS/2 was generated using Cocktail compiler tools, 
+        and compiled using the EMX/GCC. So the runtime environment for the 
+        compiler has to include the EMX runtime environment. In 'install.emx' 
+        is documentation available on how to install the EMX-run time system.
+        A reduced release of required tools is available in 'emxpc.zip'
+        
+        The PASCAL compiler itself only uses two environment variables:
+        TMP                     The location for intermediate files.
+                                Note that this directory has to exist.
+        PAS_INC                 This path will be included in the seachpath for
+                                the preprocessor.
+    
+        But the linker can use others as well:
+        LIB                     The path used by LINK386 for libraries.                        
+        PAS_LIB                 The path where additional libraries can be 
+                                found for the linker. (currently ignored)
+        LIBRARY_PATH            GNU/GAS libraries need to go into the 
+                                directory given by this env-variable.
+
+    RUNTIME LIBRARY
+                            
+        The source for the runtime library is included in the package. It is 
+        the part which is least severly tested. I has several problem areas in 
+        it, but for most average programming it should work.
+        One is always free to go through the runtime library code and modify it 
+        to fit ones own requirements. If these changes are usefull to others as 
+        well I'd be more than willing to include them in a new release.
+    
+        The area with most problems in INPUT from an interactive file (eg.: 
+        input), since different pascal compilers have different kind of 
+        behaviour. TurboPascal nowhere nearly complies with the standard, and 
+        as such is it currently hard to mimic it's behaviour.
+        [ Unless ofcourse, you are of the opinion that TurboPascal is the 
+          standard :-( ]
+    
+    FILES
+        
+        .pas .p                  pascal source files
+        .inc .hp .hs             assembler or pascal include files
+        .i                       pascal preprocessed files
+        .asm .s .S               assembler sources
+        .obj                     MASM/ML object files
+        .o                       GNU/GAS object files
+        .lib .a                  Library files
+        /tmp/pc????              Temporary files
+        
+    AUTHOR
+        
+        Willem Jan Withagen.                      phone: +31-(0)40-473401
+        Eindhoven University of Technology        fax:   +31-(0)40-474702
+        Room 10.35                                Email: wjw@eb.ele.tue.nl
+        PO Box 513
+        5600 MB Eindhoven
+        The Netherlands
+
+    ORIGINAL SOURCE
+        
+        The most current release of this compiler should always be available
+        from:
+                  ftp.eb.ele.tue.nl:/pub/src/pascal/pasos2?.zip    
+        
+        where '?' represents the most recent version.           
+	Source are not (yet) available.
+
+    EMX
+    	EMX is available from:
+                  ftp.eb.ele.tue.nl:/pub/pc/emx-0.8?
+
+    SEE ALSO
+
+        Kathleen Jensen and Niklaus Wirth.
+        Pascal User and Reference Manual
+        Springer Verlag, second edition, 1974.
+
+        British Standards Institution.
+        Specification fo computer programming language PASCAL, 1984.
+        ISO 7185 / BS 6192.
+    
+        Willem Jan Withagen
+        A flexible frontend for a PASCAL compiler
+        Technical report Eindhoven University of technology
+        ftp: ftp.eb.ele.tue.nl:/pub/src/pascal/frontend.*
+    

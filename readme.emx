@@ -1,0 +1,180 @@
+===============================================================================
+readme.doc        emx 0.8g    INTRODUCTION                          13-Jul-1993
+===============================================================================
+                                     Copyright (c) 1990-1993 by Eberhard Mattes
+
+            *** See history.doc for important information ***
+
+Welcome to emx 0.8g, a common environment for creating 32-bit programs
+for OS/2 2.0 and DOS.  You can use the GNU C compiler to compile
+programs for emx.  The main design goal of emx is to simplify porting
+Unix software to OS/2 2.0 and DOS.  Moreover, you can create `native'
+OS/2 programs, including Presentation Manager applications.
+
+The emx package includes:
+
+- emx.dll and emxio.dll dynamic link libraries for OS/2 2.0
+
+- emx.exe DOS extender for running 32-bit programs under DOS
+
+- emxbind.exe for creating .exe files which work both under OS/2 2.0
+  and DOS
+
+- emxomf.exe for converting .o object files (a.out) to .obj object
+  files (OMF).  With emxomf and LINK386 you can create OS/2 programs
+  that don't need emx.dll
+
+- C header files and a nearly complete C library with source
+
+- a simple graphics library for 320x200 (256 colors) mode, with source
+
+- a library for screen output in windows, with source
+
+Additionally, the following GNU programs are available compiled and with
+patches and sources (note that these files are not part of emx):
+
+- GCC 2.4.5 the GNU C compiler (requires a 387 coprocessor under
+  MS-DOS!)
+
+- GAS 1.38.1, the GNU assembler
+
+- GDB 4.9, the GNU debugger
+
+- ld, the GNU linker
+
+- ar, nm, size, strip, objdump: some GNU utilities for dealing with
+  binary files
+
+- texinfo, the GNU documentation system
+
+- Patches for the GNU sources
+
+- Patched source for GCC, GAS, GDB, ld, ar, nm, size, strip, objdump,
+  info, makeinfo, texindex.  You can compile all these programs with
+  the files that come with emx (but you also need a make utility, such
+  as NMAKE).
+
+- BSD curses library
+
+You can get the complete GNU sources by anonymous ftp from
+prep.ai.mit.edu and other archives, for instance ftp.uni-stuttgart.de.
+
+
+emx is packaged in the following files:
+
+  emxrt.zip     emx runtime package
+  emxdev.zip    emx development system (without compiler)
+  emxview.zip   emx documentation in OS/2 .inf format
+  emxlib.zip    emx library sources
+  emxsrc1.zip   Source for emxomf, emxomfar and emxomfld
+  emxample.zip  Sample programs
+  emxtest.zip   Test programs (used for testing emx and the libraries)
+
+GNU programs compiled for emx, patches and patched sources:
+
+  gnudev.zip    GNU development tools compiled for emx
+  gnuview.zip   gnudev.inf (gnudev.doc in OS/2 .inf format)
+  gppdev.zip    Additional GNU programs and files for compiling C++
+  gobjcdev.zip  Additional GNU programs and files for compiling
+                Objective C
+  gnupat.zip    Patches for GNU sources
+  gnudoc.zip    Documentation for GNU programs (texinfo sources)
+  gnuinfo.zip   GNU texinfo (includes info file browser)
+  gnusrc.zip    Patched GNU sources (ld, ar, nm, size, strip, objdump,
+                termcap)
+  gccsrc1.zip   Patched GNU sources (GCC 2.4.5, part 1)
+  gccsrc2.zip   Patched GNU sources (GCC 2.4.5, part 2)
+  gccsrc3.zip   Patched GNU sources (GCC 2.4.5, part 3)
+  gassrc.zip    Patched GNU sources (GAS 1.38.1)
+  gdbsrc.zip    Patched GNU sources (GDB 4.9)
+  gppsrc.zip    Patched sources of libg++ 2.2
+
+BSD libraries compiled for emx with sources:
+
+  bsddev.zip    BSD libraries (curses etc.)
+  bsddoc.zip    Documentation for BSD libraries
+  bsdsrc.zip    Source for BSD libraries
+
+For unpacking, you need unzip v5.0 which is available from many
+archives.  Look for files named
+
+  unzip50.exe   MS-DOS executable for unzip
+  unz50_32.exe  OS/2 2.x 32-bit executable
+
+Read INSTALL.DOC to learn how to install emx.
+
+After unpacking the emx runtime and development system packages,
+you'll find further information in the following files:
+
+  \emx\doc\COPYING.EMX          emx & library license
+  \emx\doc\COPYING              GNU General Public License
+  \emx\doc\install.doc          Installation guide
+  \emx\doc\emxrt.doc            User's guide to the emx runtime package
+  \emx\doc\emxdev.doc           Application developer's guide
+  \emx\doc\libref.doc           C library reference
+  \emx\doc\build.doc            Compiling the GNU sources
+  \emx\doc\history.doc          Change log
+  \emx\doc\future.doc           Things to do
+  \emx\book\emxrt.inf           .inf version of emxrt.doc
+  \emx\book\emxdev.inf          .inf version of emxdev.doc (optional)
+  \emx\book\libref.inf          .inf version of libref.doc (optional)
+
+After unpacking the GNU and BSD packages, you'll find further
+information in the following files:
+
+  \emx\doc\COPYING              GNU General Public License
+  \emx\doc\COPYING.LIB          GNU Library General Public License
+  \emx\doc\COPYING.BSD          BSD license (for libbsd and libcurse)
+  \emx\doc\gnudev.doc           GNU development tools information
+  \emx\doc\bsddev.doc           BSD library information
+  \emx\book\gnudev.inf          .inf version of gnudev.doc (optional)
+
+
+NO WARRANTY: No guarantee is made as to the proper functioning of the
+software.  No liability will be admitted for damage resulting from
+using the software.
+
+See \emx\doc\COPYING.EMX and \emx\doc\COPYING for copyright
+information.  emx is not public domain software!
+
+Instead of a list: All the trademarks used in this document and all
+the other emx documents are registered to whoever it is that owns
+them.
+
+emx is available for anonymous ftp on
+
+  ftp.uni-stuttgart.de [129.69.1.12]: /soft/os2/emx-0.8g
+  ftp-os2.nmsu.edu  [128.123.35.151]: /os2/2_x/unix/gnu/emx08g
+  src.doc.ic.ac.uk     [146.169.2.1]: /pub/packages/os2/2_x/unix/gnu/emx08g
+  ftp.informatik.tu-muenchen.de [131.159.0.198]:
+                                      /pub/comp/os/os2/devtools/emx+gcc
+
+An emx-related mailing list has been created: emx-list.  The address
+for people to request to be added to or removed from the list is:
+
+    listserv@ludd.luth.se
+
+To subscribe, send a message containing
+
+    sub emx-list Joe User
+
+to listserv@ludd.luth.se.  Of course, you should use your name instead
+of Joe User's name.
+
+
+The author of emx is
+
+    Eberhard Mattes
+    Teckstrasse 81                                      (TeX: Teckstra\ss e)
+    D-71696 Moeglingen                                  (TeX: M\"oglingen)
+    Germany
+
+Internet: mattes@azu.informatik.uni-stuttgart.de  (subject to change)
+
+No telephone calls please!  It must be stressed that the author does
+not reply to letters if you don't include return postage
+(international postal reply coupon if you're outside Germany) and a
+self-addressed envelope.
+
+--------------------------- END OF README.DOC ------------------------------
+

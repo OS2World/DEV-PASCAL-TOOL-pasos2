@@ -1,0 +1,106 @@
+				
+                                                Eindhoven, 16 december, 1993
+
+NOTE: IMPORTANT.
+      This compiler does not include an assembler, but it does require one.
+      And currently it is very picky. It only generates code for MASM 6.0A
+      (note the A !!)
+      I had severe problems with people using the regular MASM 6.0, the major
+      reason was wrong address calculations.
+      I haven't tried it with MASM 5.x, since I don't have it.
+      
+      If you can't get it to run with MASM 6.0, go and yell at MS to make
+      MASM 6.0A more freely available. So people can buy it.
+      
+      Or buy Borlands TASM, which unfortunately is included in a rather large
+      package, and ain't cheap either.
+        
+      If you have installed the EMX gnu compiler tools, you can use GNU/GAS
+      which is the default. If you have installed only the emx-runtime 
+      environment installed you'll need to add some extra tools.
+      Either:
+             Install emxdev and gnudev. (See the install.emx file)
+             Or get emxpc.zip which is a stripped down version of 
+             emxrt and gnudev, just enough to be able to work with this 
+             PASCAL compiler.
+               
+=================================
+This archive contains a 32-bit pascal compiler which accepts standard PASCAL
+as described in the Pascal User Manual, by Jensen and Wirth.
+
+To be able to run this compiler, (not the compiler output) you'll need the
+EMX-runtime enviroment, written by Eberhart Mattes. This is available at many
+sites which have OS/2 tools. Including ftp.cdrom.com.
+It will also be availe from the original source:
+	ftp.eb.ele.tue.nl:/pub/pc/src/pascal/*
+
+Next to this is the GNU-CPP used, until I get my own PASCAL-preprocessor up 
+and running. CPP is included in this package, the sources as required are
+also available at the above location.
+
+To install the compiler:
+    - Create a target directory.
+    - run 
+	unzip pasos2 <target-dir>
+      this will create directories:
+	target/bin
+	      /lib
+              /include
+    
+    - If you don't run EMX tools yet.
+      unpack the EMX-rt system.
+      or the EMX-pc system if you want to use GNU/GAS
+      and follow the included instructions for the installation as given in
+      install.emx.
+      
+    - Add 'target/bin' and and '----\emx\bin' to your path.
+      Add '----\emx\dll' to your libpath env-variable. (OS/2)
+
+    The emxpc reduced kit contains:
+            emx/bin/ar.exe
+            emx/bin/as.exe
+            emx/bin/cpp.exe
+            emx/bin/emx.exe
+            emx/bin/emxbind.exe
+            emx/bin/emxd.exe
+            emx/bin/emxl.exe
+            emx/bin/emxrev.cmd
+            emx/bin/gdb.exe
+            emx/bin/ld.exe
+            emx/book/emxrt.inf
+            emx/dll/emx.dll
+            emx/dll/emxio.dll
+            emx/dll/emxlibc.dll
+            emx/dll/emxwrap.dll
+            emx/doc/COPYING.EMX
+            emx/doc/COPYING.gnu
+            emx/doc/emxrt.doc
+            emx/doc/history.doc
+            emx/doc/install.doc
+            emx/doc/readme.doc
+            emx/etc/dmake.ini
+            emx/etc/termcap.dat
+            emx/lib/binmode.o
+            emx/lib/crt0.o
+            emx/lib/dll0.o
+            emx/lib/libc.a
+            emx/lib/libemx2.a
+            emx/lib/libemxst.a
+            emx/lib/libg.a
+            emx/lib/libgcc.a
+            emx/lib/libm.a
+            emx/lib/libos2.a
+    
+    And should be enough to recompile the libraries.
+    
+    
+    Questions, remarks, and postcards are welcome at:
+            
+    Willem Jan Withagen.                      phone: +31-(0)40-473401
+    Eindhoven University of Technology        fax:   +31-(0)40-474702
+    Room 10.35                                Email: wjw@eb.ele.tue.nl
+    PO Box 513
+    5600 MB Eindhoven
+    The Netherlands
+
+              
